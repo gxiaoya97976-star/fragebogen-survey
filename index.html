@@ -1,5 +1,110 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Deployed!</title>
-<h1>GitHub Pages OK ✅</h1>
-<p>如果你能看到这页，说明 Pages 正常了。接下来把你真正的问卷页面内容替换进来即可。</p>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>问卷调查</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:860px;margin:0 auto;padding:24px;line-height:1.6}
+    .card{border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin:16px 0}
+    label{display:block;margin:12px 0 6px}
+    input[type=text],input[type=email],select,textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .hint{color:#6b7280;font-size:12px}
+    button{padding:12px 18px;border:0;border-radius:10px;cursor:pointer}
+    .primary{background:#111827;color:#fff}
+    .ghost{background:#f3f4f6}
+    .success,.error{padding:12px;border-radius:10px;margin-top:16px;display:none}
+    .success{background:#ecfdf5}
+    .error{background:#fef2f2}
+    .req{color:#ef4444}
+  </style>
+</head>
+<body>
+  <h1>问卷调查</h1>
+  <p class="hint">带<span class="req">*</span>为必填。提交后会写入 Google 表格。</p>
+
+  <!-- 用你的 Apps Script /exec 链接替换 action -->
+  <form id="survey" action="https://script.google.com/macros/s/AKfycbzwLudLGZfvr7pvCXEpA3CMD_v_qbVotO0NdbJUUxh2ekWSvSzIYdeA_Vrk3qzScivlWA/exec" method="POST">
+    <!-- 基本信息 -->
+    <div class="card">
+      <h2>基本信息</h2>
+      <div class="row">
+        <div>
+          <label for="name">姓名 <span class="req">*</span></label>
+          <input id="name" name="name" required />
+        </div>
+        <div>
+          <label for="email">邮箱</label>
+          <input id="email" name="email" type="email" />
+        </div>
+      </div>
+      <label for="age">年龄</label>
+      <input id="age" name="age" type="text" />
+    </div>
+
+    <!-- 把你的题目放在这里：确保每题都有唯一的 name -->
+    <div class="card">
+      <h2>问卷内容</h2>
+
+      <label>1) 您对系统易用性的评价？ <span class="req">*</span></label>
+      <div>
+        <label><input type="radio" name="q1_usability" value="非常好" required /> 非常好</label>
+        <label><input type="radio" name="q1_usability" value="较好" /> 较好</label>
+        <label><input type="radio" name="q1_usability" value="一般" /> 一般</label>
+        <label><input type="radio" name="q1_usability" value="较差" /> 较差</label>
+      </div>
+
+      <label>2) 哪些功能最有帮助？（可多选）</label>
+      <div>
+        <label><input type="checkbox" name="q2_features" value="数据可视化" /> 数据可视化</label>
+        <label><input type="checkbox" name="q2_features" value="规则校验" /> 规则校验</label>
+        <label><input type="checkbox" name="q2_features" value="架构推导" /> 架构推导</label>
+        <label><input type="checkbox" name="q2_features" value="导出报告" /> 导出报告</label>
+      </div>
+
+      <label for="q3">3) 进一步建议</label>
+      <textarea id="q3" name="q3_suggestions" rows="4" placeholder="请写下你的建议..."></textarea>
+    </div>
+
+    <!-- 可选：提交后跳转到感谢页 -->
+    <!-- <input type="hidden" name="_redirect" value="https://gxiaoya97976-star.github.io/fragebogen-survey/thanks.html" /> -->
+
+    <div class="row">
+      <button class="ghost" type="reset">清空</button>
+      <button class="primary" type="submit">提交</button>
+    </div>
+
+    <div id="ok" class="success">✅ 已提交成功，感谢参与！</div>
+    <div id="err" class="error">❌ 提交失败，请稍后重试。</div>
+  </form>
+
+  <script>
+    // 无刷新提交，显示成功/失败
+    const form = document.getElementById('survey');
+    const ok = document.getElementById('ok');
+    const err = document.getElementById('err');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok.style.display = 'none';
+      err.style.display = 'none';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        if (res.ok) {
+          ok.style.display = 'block';
+          form.reset();
+        } else {
+          err.style.display = 'block';
+        }
+      } catch {
+        err.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
