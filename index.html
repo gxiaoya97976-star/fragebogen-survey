@@ -8,7 +8,7 @@
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:860px;margin:0 auto;padding:24px;line-height:1.6}
     .card{border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin:16px 0}
     label{display:block;margin:12px 0 6px}
-    input[type=text],input[type=email],select,textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+    input[type=text],input[type=number],textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .hint{color:#6b7280;font-size:12px}
     button{padding:12px 18px;border:0;border-radius:10px;cursor:pointer}
@@ -24,51 +24,89 @@
   <h1>问卷调查</h1>
   <p class="hint">带<span class="req">*</span>为必填。提交后会写入 Google 表格。</p>
 
-  <!-- 用你的 Apps Script /exec 链接替换 action -->
+  <!-- 把 action 换成你的 Apps Script /exec -->
   <form id="survey" action="https://script.google.com/macros/s/AKfycbzwLudLGZfvr7pvCXEpA3CMD_v_qbVotO0NdbJUUxh2ekWSvSzIYdeA_Vrk3qzScivlWA/exec" method="POST">
-    <!-- 基本信息 -->
+    <!-- Q1 -->
     <div class="card">
-      <h2>基本信息</h2>
-      <div class="row">
-        <div>
-          <label for="name">姓名 <span class="req">*</span></label>
-          <input id="name" name="name" required />
-        </div>
-        <div>
-          <label for="email">邮箱</label>
-          <input id="email" name="email" type="email" />
-        </div>
+      <h2>Q1 你觉得系统易用性如何？ <span class="req">*</span></h2>
+      <div>
+        <label><input type="radio" name="q1" value="非常好" required> 非常好</label>
+        <label><input type="radio" name="q1" value="较好"> 较好</label>
+        <label><input type="radio" name="q1" value="一般"> 一般</label>
+        <label><input type="radio" name="q1" value="较差"> 较差</label>
       </div>
-      <label for="age">年龄</label>
-      <input id="age" name="age" type="text" />
+      <label>补充说明（可选）</label>
+      <input type="text" name="q1_remark" placeholder="例如：导航清晰/按钮不明显等">
     </div>
 
-    <!-- 把你的题目放在这里：确保每题都有唯一的 name -->
+    <!-- Q2 -->
     <div class="card">
-      <h2>问卷内容</h2>
-
-      <label>1) 您对系统易用性的评价？ <span class="req">*</span></label>
+      <h2>Q2 流程清晰度</h2>
       <div>
-        <label><input type="radio" name="q1_usability" value="非常好" required /> 非常好</label>
-        <label><input type="radio" name="q1_usability" value="较好" /> 较好</label>
-        <label><input type="radio" name="q1_usability" value="一般" /> 一般</label>
-        <label><input type="radio" name="q1_usability" value="较差" /> 较差</label>
+        <label><input type="radio" name="q2" value="非常清晰"> 非常清晰</label>
+        <label><input type="radio" name="q2" value="较清晰"> 较清晰</label>
+        <label><input type="radio" name="q2" value="一般"> 一般</label>
+        <label><input type="radio" name="q2" value="不清晰"> 不清晰</label>
       </div>
-
-      <label>2) 哪些功能最有帮助？（可多选）</label>
-      <div>
-        <label><input type="checkbox" name="q2_features" value="数据可视化" /> 数据可视化</label>
-        <label><input type="checkbox" name="q2_features" value="规则校验" /> 规则校验</label>
-        <label><input type="checkbox" name="q2_features" value="架构推导" /> 架构推导</label>
-        <label><input type="checkbox" name="q2_features" value="导出报告" /> 导出报告</label>
-      </div>
-
-      <label for="q3">3) 进一步建议</label>
-      <textarea id="q3" name="q3_suggestions" rows="4" placeholder="请写下你的建议..."></textarea>
+      <label>补充说明（可选）</label>
+      <input type="text" name="q2_remark">
     </div>
 
-    <!-- 可选：提交后跳转到感谢页 -->
-    <!-- <input type="hidden" name="_redirect" value="https://gxiaoya97976-star.github.io/fragebogen-survey/thanks.html" /> -->
+    <!-- Q3 -->
+    <div class="card">
+      <h2>Q3 概念理解程度</h2>
+      <div>
+        <label><input type="radio" name="q3" value="完全理解"> 完全理解</label>
+        <label><input type="radio" name="q3" value="大致理解"> 大致理解</label>
+        <label><input type="radio" name="q3" value="部分理解"> 部分理解</label>
+        <label><input type="radio" name="q3" value="不太理解"> 不太理解</label>
+      </div>
+      <label>补充说明（可选）</label>
+      <input type="text" name="q3_remark">
+    </div>
+
+    <!-- Q4~Q7 1-5 分打分题 -->
+    <div class="card">
+      <h2>Q4~Q7 打分（1=最低，5=最高）</h2>
+      <label>Q4 需求覆盖度（1-5）</label>
+      <input type="number" name="q4" min="1" max="5" step="1" required>
+
+      <label>Q5 架构合理性（1-5）</label>
+      <input type="number" name="q5" min="1" max="5" step="1" required>
+
+      <label>Q6 决策逻辑清晰度（1-5）</label>
+      <input type="number" name="q6" min="1" max="5" step="1" required>
+
+      <label>Q7 操作效率（1-5）</label>
+      <input type="number" name="q7" min="1" max="5" step="1" required>
+    </div>
+
+    <!-- Q8 -->
+    <div class="card">
+      <h2>Q8 哪些功能最有帮助？（多选）</h2>
+      <label><input type="checkbox" name="q8" value="数据可视化"> 数据可视化</label>
+      <label><input type="checkbox" name="q8" value="规则校验"> 规则校验</label>
+      <label><input type="checkbox" name="q8" value="架构推导"> 架构推导</label>
+      <label><input type="checkbox" name="q8" value="导出报告"> 导出报告</label>
+      <label>原因/场景（可选）</label>
+      <input type="text" name="q8_remark" placeholder="为什么这些功能有帮助？">
+    </div>
+
+    <!-- Q9~Q11 开放题 -->
+    <div class="card">
+      <h2>Q9 优点</h2>
+      <textarea name="q9" rows="3"></textarea>
+
+      <h2>Q10 改进建议</h2>
+      <textarea name="q10" rows="3"></textarea>
+
+      <h2>Q11 是否愿意继续参与测试？</h2>
+      <div>
+        <label><input type="radio" name="q11" value="愿意"> 愿意</label>
+        <label><input type="radio" name="q11" value="看情况"> 看情况</label>
+        <label><input type="radio" name="q11" value="暂不"> 暂不</label>
+      </div>
+    </div>
 
     <div class="row">
       <button class="ghost" type="reset">清空</button>
@@ -80,7 +118,7 @@
   </form>
 
   <script>
-    // 无刷新提交，显示成功/失败
+    // 用 JS fetch 提交，这样不会跳出当前页；Apps Script 会收到 e.parameter
     const form = document.getElementById('survey');
     const ok = document.getElementById('ok');
     const err = document.getElementById('err');
@@ -89,12 +127,9 @@
       e.preventDefault();
       ok.style.display = 'none';
       err.style.display = 'none';
-
       try {
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form)
-        });
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        // Apps Script 返回 JSON；即便跨域也能写入，fetch 200 即认为成功
         if (res.ok) {
           ok.style.display = 'block';
           form.reset();
